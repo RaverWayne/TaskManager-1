@@ -1,7 +1,9 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
+using System.Configuration;
 using TaskManager_Business_Logic;
-
+using TaskManager_Data_Logic;
+using System.Data.SqlClient;
+using System.Configuration;
 
 namespace TaskManager
 {
@@ -9,14 +11,24 @@ namespace TaskManager
     {
         static void Main()
         {
-            TaskManagerUI ui = new TaskManagerUI();
+            // Get connection string from config
+            var connectionString = ConfigurationManager.ConnectionStrings["TaskManagerDB"]?.ConnectionString;
+
+            // Initialize with SQL Server
+            var dataService = new SqlServerDataService(connectionString);
+            TaskManagerUI ui = new TaskManagerUI(new TaskManagerService(dataService));
             ui.Run();
         }
     }
 
     class TaskManagerUI
     {
-        private TaskManagerService taskService = new TaskManagerService();
+        private readonly TaskManagerService taskService;
+
+        public TaskManagerUI(TaskManagerService service)
+        {
+            taskService = service;
+        }
 
         public void Run()
         {
