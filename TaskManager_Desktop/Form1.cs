@@ -31,7 +31,7 @@ namespace TaskManager_Desktop
 
         private void SetupDataBindings()
         {
-            
+            // Set up data source switching
             radInMemory.Checked = _currentDataSource == "InMemory";
             radTextFile.Checked = _currentDataSource == "TextFile";
             radJsonFile.Checked = _currentDataSource == "JsonFile";
