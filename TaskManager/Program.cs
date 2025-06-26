@@ -3,7 +3,6 @@ using System.Configuration;
 using TaskManager_Business_Logic;
 using TaskManager_Data_Logic;
 using System.Data.SqlClient;
-using System.Configuration;
 
 namespace TaskManager
 {
