@@ -34,9 +34,8 @@
             label2 = new Label();
             groupBox1.SuspendLayout();
             SuspendLayout();
-            // 
-            // lstTasks
-            // 
+
+
             lstTasks.Font = new Font("Segoe UI", 10F);
             lstTasks.FormattingEnabled = true;
             lstTasks.ItemHeight = 23;
@@ -44,9 +43,8 @@
             lstTasks.Name = "lstTasks";
             lstTasks.Size = new Size(400, 257);
             lstTasks.TabIndex = 0;
-            // 
-            // txtNewTask
-            // 
+
+
             txtNewTask.Font = new Font("Segoe UI", 10F);
             txtNewTask.Location = new Point(12, 298);
             txtNewTask.Name = "txtNewTask";
@@ -54,9 +52,8 @@
             txtNewTask.Size = new Size(400, 30);
             txtNewTask.TabIndex = 1;
             txtNewTask.Text = "it";
-            // 
-            // btnAdd
-            // 
+   
+
             btnAdd.BackColor = Color.SteelBlue;
             btnAdd.FlatStyle = FlatStyle.Flat;
             btnAdd.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
@@ -68,9 +65,8 @@
             btnAdd.Text = "Add";
             btnAdd.UseVisualStyleBackColor = false;
             btnAdd.Click += btnAdd_Click;
-            // 
-            // btnRemove
-            // 
+ 
+
             btnRemove.BackColor = Color.IndianRed;
             btnRemove.FlatStyle = FlatStyle.Flat;
             btnRemove.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
@@ -82,9 +78,8 @@
             btnRemove.Text = "Remove";
             btnRemove.UseVisualStyleBackColor = false;
             btnRemove.Click += btnRemove_Click;
-            // 
-            // btnUpdate
-            // 
+ 
+
             btnUpdate.BackColor = Color.SeaGreen;
             btnUpdate.FlatStyle = FlatStyle.Flat;
             btnUpdate.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
@@ -96,18 +91,16 @@
             btnUpdate.Text = "Update";
             btnUpdate.UseVisualStyleBackColor = false;
             btnUpdate.Click += btnUpdate_Click;
-            // 
-            // txtSearch
-            // 
+
+
             txtSearch.Font = new Font("Segoe UI", 10F);
             txtSearch.Location = new Point(12, 394);
             txtSearch.Name = "txtSearch";
             txtSearch.PlaceholderText = "Search tasks...";
             txtSearch.Size = new Size(294, 30);
             txtSearch.TabIndex = 5;
-            // 
-            // btnSearch
-            // 
+
+ 
             btnSearch.BackColor = Color.MediumPurple;
             btnSearch.FlatStyle = FlatStyle.Flat;
             btnSearch.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
@@ -119,9 +112,8 @@
             btnSearch.Text = "Search";
             btnSearch.UseVisualStyleBackColor = false;
             btnSearch.Click += btnSearch_Click;
-            // 
-            // groupBox1
-            // 
+
+
             groupBox1.Controls.Add(radJsonFile);
             groupBox1.Controls.Add(radTextFile);
             groupBox1.Controls.Add(radInMemory);
@@ -132,9 +124,7 @@
             groupBox1.TabIndex = 7;
             groupBox1.TabStop = false;
             groupBox1.Text = "Data Source";
-            // 
-            // radJsonFile
-            // 
+
             radJsonFile.AutoSize = true;
             radJsonFile.Font = new Font("Segoe UI", 9F);
             radJsonFile.Location = new Point(6, 80);
@@ -144,9 +134,8 @@
             radJsonFile.Text = "JSON File";
             radJsonFile.UseVisualStyleBackColor = true;
             radJsonFile.CheckedChanged += radDataSource_CheckedChanged;
-            // 
-            // radTextFile
-            // 
+
+
             radTextFile.AutoSize = true;
             radTextFile.Font = new Font("Segoe UI", 9F);
             radTextFile.Location = new Point(6, 50);
@@ -156,9 +145,8 @@
             radTextFile.Text = "Text File";
             radTextFile.UseVisualStyleBackColor = true;
             radTextFile.CheckedChanged += radDataSource_CheckedChanged;
-            // 
-            // radInMemory
-            // 
+
+
             radInMemory.AutoSize = true;
             radInMemory.Checked = true;
             radInMemory.Font = new Font("Segoe UI", 9F);
@@ -170,9 +158,8 @@
             radInMemory.Text = "In Memory";
             radInMemory.UseVisualStyleBackColor = true;
             radInMemory.CheckedChanged += radDataSource_CheckedChanged;
-            // 
-            // lblTaskCount
-            // 
+
+
             lblTaskCount.AutoSize = true;
             lblTaskCount.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
             lblTaskCount.Location = new Point(12, 272);
@@ -180,9 +167,8 @@
             lblTaskCount.Size = new Size(63, 20);
             lblTaskCount.TabIndex = 8;
             lblTaskCount.Text = "0 task(s)";
-            // 
-            // btnClear
-            // 
+
+
             btnClear.BackColor = Color.Gray;
             btnClear.FlatStyle = FlatStyle.Flat;
             btnClear.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
@@ -194,9 +180,8 @@
             btnClear.Text = "Clear";
             btnClear.UseVisualStyleBackColor = false;
             btnClear.Click += btnClear_Click;
-            // 
-            // label1
-            // 
+
+ 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
             label1.Location = new Point(418, 135);
@@ -204,9 +189,8 @@
             label1.Size = new Size(217, 20);
             label1.TabIndex = 10;
             label1.Text = "Changes take effect immediately";
-            // 
-            // label2
-            // 
+
+
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 7.8F, FontStyle.Italic);
             label2.Location = new Point(418, 155);
@@ -214,9 +198,8 @@
             label2.Size = new Size(164, 17);
             label2.TabIndex = 11;
             label2.Text = "(Data persists between runs)";
-            // 
-            // frmMain
-            // 
+
+
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;

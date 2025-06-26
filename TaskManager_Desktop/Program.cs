@@ -11,7 +11,7 @@ namespace TaskManager_Desktop
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // Initialize with InMemory by default
+            
             var dataService = new TaskManager_Data_Logic.InMemoryDataService();
             var taskService = new TaskManager_Business_Logic.TaskManagerService(dataService);
 
