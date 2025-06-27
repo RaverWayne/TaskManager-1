@@ -51,7 +51,6 @@ namespace TaskManager_Business_Logic
             }
             return foundIndices.ToArray();
         }
-
         public bool UpdateTask(int taskNumber, string newTaskText)
         {
             if (string.IsNullOrWhiteSpace(newTaskText))

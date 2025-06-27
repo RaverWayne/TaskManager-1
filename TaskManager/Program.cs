@@ -10,10 +10,9 @@ namespace TaskManager
     {
         static void Main()
         {
-            // Get connection string from config
+
             var connectionString = ConfigurationManager.ConnectionStrings["TaskManagerDB"]?.ConnectionString;
 
-            // Initialize with SQL Server
             var dataService = new SqlServerDataService(connectionString);
             TaskManagerUI ui = new TaskManagerUI(new TaskManagerService(dataService));
             ui.Run();

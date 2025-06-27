@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager_Data_Logic", "T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManager_Desktop", "TaskManager_Desktop\TaskManager_Desktop.csproj", "{992DA251-EC42-4E60-B8E7-1E9245AC7A5C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerAPI", "TaskManagerAPI\TaskManagerAPI.csproj", "{6FC1881A-893D-4E99-906D-0EDDE4746928}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{992DA251-EC42-4E60-B8E7-1E9245AC7A5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{992DA251-EC42-4E60-B8E7-1E9245AC7A5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{992DA251-EC42-4E60-B8E7-1E9245AC7A5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FC1881A-893D-4E99-906D-0EDDE4746928}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FC1881A-893D-4E99-906D-0EDDE4746928}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FC1881A-893D-4E99-906D-0EDDE4746928}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FC1881A-893D-4E99-906D-0EDDE4746928}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
