@@ -10,10 +10,18 @@ namespace TaskManager_Business_Logic
     public class TaskManagerService
     {
         private ITaskDataService taskDataService;
+        private readonly EmailService emailService;
+        private string userEmail;
 
         public TaskManagerService(ITaskDataService dataService)
         {
             this.taskDataService = dataService;
+            this.emailService = new EmailService();
+        }
+
+        public void SetUserEmail(string email)
+        {
+            userEmail = email;
         }
 
         public string[] GetTasks() => taskDataService.GetTasks();
@@ -22,16 +30,38 @@ namespace TaskManager_Business_Logic
         {
             if (string.IsNullOrWhiteSpace(task))
                 return false;
-            return taskDataService.AddTask(task);
+
+            bool success = taskDataService.AddTask(task);
+
+
+            if (success && !string.IsNullOrWhiteSpace(userEmail))
+            {
+                emailService.SendTaskAddedEmail(userEmail, task);
+            }
+
+            return success;
         }
 
         public bool RemoveTask(int taskNumber)
         {
             int index = taskNumber - 1;
             string[] tasks = GetTasks();
+
             if (index < 0 || index >= tasks.Length)
                 return false;
-            return taskDataService.RemoveTask(index);
+
+
+            string taskToDelete = tasks[index];
+
+            bool success = taskDataService.RemoveTask(index);
+
+
+            if (success && !string.IsNullOrWhiteSpace(userEmail))
+            {
+                emailService.SendTaskDeletedEmail(userEmail, taskToDelete);
+            }
+
+            return success;
         }
 
         public int[] SearchTasks(string keyword)
@@ -49,8 +79,10 @@ namespace TaskManager_Business_Logic
                     foundIndices.Add(i + 1);
                 }
             }
+
             return foundIndices.ToArray();
         }
+
         public bool UpdateTask(int taskNumber, string newTaskText)
         {
             if (string.IsNullOrWhiteSpace(newTaskText))
@@ -58,10 +90,22 @@ namespace TaskManager_Business_Logic
 
             int index = taskNumber - 1;
             string[] tasks = GetTasks();
+
             if (index < 0 || index >= tasks.Length)
                 return false;
 
-            return taskDataService.UpdateTask(index, newTaskText);
+
+            string oldTaskText = tasks[index];
+
+            bool success = taskDataService.UpdateTask(index, newTaskText);
+
+
+            if (success && !string.IsNullOrWhiteSpace(userEmail))
+            {
+                emailService.SendTaskUpdatedEmail(userEmail, oldTaskText, newTaskText);
+            }
+
+            return success;
         }
     }
 }

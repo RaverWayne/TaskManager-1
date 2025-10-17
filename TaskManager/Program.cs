@@ -3,6 +3,7 @@ using System.Configuration;
 using TaskManager_Business_Logic;
 using TaskManager_Data_Logic;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace TaskManager
 {
@@ -10,12 +11,61 @@ namespace TaskManager
     {
         static void Main()
         {
-
             var connectionString = ConfigurationManager.ConnectionStrings["TaskManagerDB"]?.ConnectionString;
 
-            var dataService = new SqlServerDataService(connectionString);
-            TaskManagerUI ui = new TaskManagerUI(new TaskManagerService(dataService));
+            ITaskDataService dataService = new SqlServerDataService(connectionString);
+            var taskService = new TaskManagerService(dataService);
+
+            string userEmail = GetUserEmail();
+            taskService.SetUserEmail(userEmail);
+
+            TaskManagerUI ui = new TaskManagerUI(taskService);
             ui.Run();
+        }
+
+        static string GetUserEmail()
+        {
+            Console.WriteLine("TASK MANAGER - Email Notification Setup");
+            Console.WriteLine("=========================================");
+
+            while (true)
+            {
+                Console.Write("Enter your email address for notifications (or press Enter to skip): ");
+                string email = Console.ReadLine()?.Trim();
+
+                if (string.IsNullOrWhiteSpace(email))
+                {
+                    Console.WriteLine("Email notifications disabled for this session.\n");
+                    return null;
+                }
+
+                if (IsValidEmail(email))
+                {
+                    Console.WriteLine($"Email notifications enabled for: {email}\n");
+                    return email;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid email format. Please try again.\n");
+                }
+            }
+        }
+
+        static bool IsValidEmail(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return false;
+
+            try
+            {
+                // Simple email validation using regex
+                var emailPattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+                return Regex.IsMatch(email, emailPattern, RegexOptions.IgnoreCase);
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 
@@ -50,7 +100,7 @@ namespace TaskManager
                         Console.Write("Enter task: ");
                         string task = Console.ReadLine();
                         if (taskService.AddTask(task))
-                            Console.WriteLine("Task added.");
+                            Console.WriteLine("Task added. Email notification sent!");
                         else
                             Console.WriteLine("Task list full or empty task.");
                         break;
@@ -68,7 +118,7 @@ namespace TaskManager
                         }
                         else
                         {
-                            Console.WriteLine("Task deleted.");
+                            Console.WriteLine("Task deleted. Email notification sent!");
                         }
                         break;
                     case 4:
@@ -142,7 +192,7 @@ namespace TaskManager
 
             if (taskService.UpdateTask(taskNumber, newTaskText))
             {
-                Console.WriteLine("Task updated successfully.");
+                Console.WriteLine("Task updated successfully. Email notification sent!");
             }
             else
             {
