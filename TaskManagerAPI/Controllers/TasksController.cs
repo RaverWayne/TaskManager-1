@@ -9,10 +9,12 @@ namespace TaskManagerAPI.Controllers
     public class TasksController : ControllerBase
     {
         private readonly TaskManagerService _taskService;
+        private readonly EmailService _emailService;
 
-        public TasksController(TaskManagerService taskService)
+        public TasksController(TaskManagerService taskService, EmailService emailService)
         {
             _taskService = taskService;
+            _emailService = emailService;
         }
 
         // GET: api/Tasks
@@ -35,62 +37,123 @@ namespace TaskManagerAPI.Controllers
             var results = _taskService.SearchTasks(keyword);
             if (results.Length == 0)
             {
-                return NotFound("No matching tasks found."); 
+                return NotFound("No matching tasks found.");
             }
-            return Ok(results); 
+
+            return Ok(results);
         }
 
         // POST: api/Tasks
+        // Body: { "task": "Task text", "email": "user@example.com" }
         [HttpPost]
-        public IActionResult AddTask([FromBody] string task)
+        public IActionResult AddTask([FromBody] AddTaskRequest request)
         {
-            if (string.IsNullOrWhiteSpace(task))
+            if (string.IsNullOrWhiteSpace(request.Task))
             {
-                return BadRequest("Task cannot be empty."); 
+                return BadRequest("Task cannot be empty.");
             }
 
-            if (_taskService.AddTask(task))
+            if (_taskService.AddTask(request.Task))
             {
-                return Ok("Task added successfully.");
+                if (!string.IsNullOrWhiteSpace(request.Email))
+                {
+                    _emailService.SendTaskAddedEmail(request.Email, request.Task);
+                }
+
+                return Ok(new
+                {
+                    message = "Task added successfully.",
+                    emailSent = !string.IsNullOrWhiteSpace(request.Email)
+                });
             }
-            return StatusCode(500, "Failed to add task."); 
+
+            return StatusCode(500, "Failed to add task.");
         }
 
-        // DELETE: api/Tasks/{taskNumber}
+        // DELETE: api/Tasks/{taskNumber}?email={email}
         [HttpDelete("{taskNumber}")]
-        public IActionResult RemoveTask(int taskNumber)
-        {
-            if (taskNumber <= 0)
-            {
-                return BadRequest("Task number must be a positive integer."); 
-            }
-
-            if (_taskService.RemoveTask(taskNumber))
-            {
-                return Ok("Task deleted successfully."); 
-            }
-            return NotFound("Task not found or invalid task number."); 
-        }
-
-        // PUT: api/Tasks/{taskNumber}
-        // For a simple string update
-        [HttpPut("{taskNumber}")]
-        public IActionResult UpdateTask(int taskNumber, [FromBody] string newTaskText)
+        public IActionResult RemoveTask(int taskNumber, [FromQuery] string email = null)
         {
             if (taskNumber <= 0)
             {
                 return BadRequest("Task number must be a positive integer.");
             }
-            if (string.IsNullOrWhiteSpace(newTaskText))
+
+            var tasks = _taskService.GetTasks();
+            if (taskNumber > tasks.Length)
             {
-                return BadRequest("New task text cannot be empty."); 
+                return NotFound("Task not found or invalid task number.");
             }
 
-            if (_taskService.UpdateTask(taskNumber, newTaskText))
+            string taskText = tasks[taskNumber - 1];
+
+            if (_taskService.RemoveTask(taskNumber))
             {
-                return Ok("Task updated successfully."); 
+                if (!string.IsNullOrWhiteSpace(email))
+                {
+                    _emailService.SendTaskDeletedEmail(email, taskText);
+                }
+
+                return Ok(new
+                {
+                    message = "Task deleted successfully.",
+                    emailSent = !string.IsNullOrWhiteSpace(email)
+                });
             }
-            return NotFound("Task not found or invalid task number."); 
+
+            return NotFound("Task not found or invalid task number.");
         }
+
+        // PUT: api/Tasks/{taskNumber}
+        // Body: { "newTaskText": "Updated task", "email": "user@example.com" }
+        [HttpPut("{taskNumber}")]
+        public IActionResult UpdateTask(int taskNumber, [FromBody] UpdateTaskRequest request)
+        {
+            if (taskNumber <= 0)
+            {
+                return BadRequest("Task number must be a positive integer.");
+            }
+
+            if (string.IsNullOrWhiteSpace(request.NewTaskText))
+            {
+                return BadRequest("New task text cannot be empty.");
+            }
+
+            var tasks = _taskService.GetTasks();
+            if (taskNumber > tasks.Length)
+            {
+                return NotFound("Task not found or invalid task number.");
+            }
+
+            string oldTaskText = tasks[taskNumber - 1];
+
+            if (_taskService.UpdateTask(taskNumber, request.NewTaskText))
+            {
+                if (!string.IsNullOrWhiteSpace(request.Email))
+                {
+                    _emailService.SendTaskUpdatedEmail(request.Email, oldTaskText, request.NewTaskText);
+                }
+
+                return Ok(new
+                {
+                    message = "Task updated successfully.",
+                    emailSent = !string.IsNullOrWhiteSpace(request.Email)
+                });
+            }
+
+            return NotFound("Task not found or invalid task number.");
+        }
+    }
+
+    public class AddTaskRequest
+    {
+        public string Task { get; set; } = string.Empty;
+        public string? Email { get; set; }
+    }
+
+    public class UpdateTaskRequest
+    {
+        public string NewTaskText { get; set; } = string.Empty;
+        public string? Email { get; set; }
     }
 }

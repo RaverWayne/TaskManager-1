@@ -1,8 +1,6 @@
 ﻿using MailKit.Net.Smtp;
 using MimeKit;
 using System;
-using System.Configuration;
-using System.Net.Mail;
 
 namespace TaskManager_Business_Logic
 {
@@ -15,14 +13,33 @@ namespace TaskManager_Business_Logic
         private readonly string fromEmail;
         private readonly string fromName;
 
+
+        public EmailService(string smtpHost, int smtpPort, string smtpUsername,
+                          string smtpPassword, string fromEmail, string fromName)
+        {
+            this.smtpHost = smtpHost;
+            this.smtpPort = smtpPort;
+            this.smtpUsername = smtpUsername;
+            this.smtpPassword = smtpPassword;
+            this.fromEmail = fromEmail;
+            this.fromName = fromName;
+        }
+
         public EmailService()
         {
-            smtpHost = ConfigurationManager.AppSettings["SmtpHost"];
-            smtpPort = int.Parse(ConfigurationManager.AppSettings["SmtpPort"]);
-            smtpUsername = ConfigurationManager.AppSettings["SmtpUsername"];
-            smtpPassword = ConfigurationManager.AppSettings["SmtpPassword"];
-            fromEmail = ConfigurationManager.AppSettings["SmtpFromEmail"];
-            fromName = ConfigurationManager.AppSettings["SmtpFromName"];
+            try
+            {
+                smtpHost = System.Configuration.ConfigurationManager.AppSettings["SmtpHost"];
+                smtpPort = int.Parse(System.Configuration.ConfigurationManager.AppSettings["SmtpPort"]);
+                smtpUsername = System.Configuration.ConfigurationManager.AppSettings["SmtpUsername"];
+                smtpPassword = System.Configuration.ConfigurationManager.AppSettings["SmtpPassword"];
+                fromEmail = System.Configuration.ConfigurationManager.AppSettings["SmtpFromEmail"];
+                fromName = System.Configuration.ConfigurationManager.AppSettings["SmtpFromName"];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Warning: Could not load email settings from config: {ex.Message}");
+            }
         }
 
         public bool SendTaskAddedEmail(string recipientEmail, string taskText)
@@ -131,7 +148,7 @@ namespace TaskManager_Business_Logic
                 };
                 message.Body = bodyBuilder.ToMessageBody();
 
-                using (var client = new MailKit.Net.Smtp.SmtpClient())
+                using (var client = new SmtpClient())
                 {
                     client.Connect(smtpHost, smtpPort, MailKit.Security.SecureSocketOptions.StartTls);
                     client.Authenticate(smtpUsername, smtpPassword);
